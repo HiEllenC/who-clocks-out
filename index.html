@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#f2eadc">
+  <title>誰先下班？</title>
+  <link rel="stylesheet" href="./styles.css?v=24">
+</head>
+<body>
+  <main class="game-shell" aria-label="誰先下班遊戲">
+    <header class="hud" aria-live="polite">
+      <div class="score-block">
+        <span class="eyebrow">已逃離</span>
+        <strong><span id="score">0</span><small> 層</small></strong>
+      </div>
+      <div class="sanity-block">
+        <div class="sanity-label"><span>理智值</span><span id="sanity-number">100</span></div>
+        <div class="sanity-track"><i id="sanity-fill"></i></div>
+      </div>
+      <button class="sound-button" id="sound-button" type="button" aria-label="切換音效">聲</button>
+    </header>
+
+    <section class="playfield" id="playfield">
+      <canvas id="game" width="390" height="720" aria-label="遊戲場景"></canvas>
+      <div class="event-toast" id="event-toast" role="status">
+        <span class="event-speaker" id="event-speaker"></span>
+        <strong class="event-line" id="event-line"></strong>
+        <span class="event-impact" id="event-impact"></span>
+      </div>
+      <div class="rival-toast" id="rival-toast" role="status"></div>
+
+      <section class="panel intro-panel" id="intro-panel">
+        <p class="kicker">今日</p>
+        <h1>誰先下班？</h1>
+        <p class="tagline">老闆我不想加班</p>
+        <div class="mini-ranking" aria-label="朋友今日排名">
+          <div><b>1</b><span>Kevin</span><strong>80 層</strong></div>
+          <div><b>2</b><span>Amy</span><strong>50 層</strong></div>
+          <div class="you"><b>—</b><span>你</span><strong>過勞死</strong></div>
+        </div>
+        <button class="primary-button" id="start-button" type="button">放我回家</button>
+        <p class="instruction">趕快逃離辦公室，別停太久被工作壓扁</p>
+      </section>
+
+      <section class="panel result-panel" id="result-panel" hidden>
+        <p class="kicker">下班失敗</p>
+        <h2 id="result-title">過勞死了</h2>
+        <p class="result-score"><strong id="final-score">0</strong><span>層</span></p>
+        <p class="death-reason" id="death-reason">理智歸零</p>
+        <div class="next-target" id="next-target"></div>
+        <button class="primary-button" id="retry-button" type="button">我還是想回家</button>
+        <button class="secondary-button" id="share-button" type="button">複製挑戰文案</button>
+      </section>
+
+      <div class="touch-controls" aria-label="移動控制">
+        <button id="left-button" type="button" aria-label="向左移動"><span>←</span></button>
+        <button id="right-button" type="button" aria-label="向右移動"><span>→</span></button>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="./src/game.js?v=24"></script>
+</body>
+</html>
