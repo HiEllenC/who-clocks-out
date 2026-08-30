@@ -221,17 +221,20 @@ test('hud values reset the visible score and sanity for a new game', () => {
   });
 });
 
-test('screen pressure gets faster on every floor without segmented jumps', () => {
+test('screen pressure accelerates more strongly on every later floor', () => {
   const speeds = Array.from({ length: 121 }, (_, floor) => (
     advanceScroll(0, floor, 1).speed
   ));
   assert.equal(speeds.slice(1).every((speed, index) => speed > speeds[index]), true);
   assert.deepEqual(advanceScroll(0, 0, 1), { cameraY: 26, speed: 26 });
-  assert.deepEqual(advanceScroll(0, 20, 1), { cameraY: 40.4, speed: 40.4 });
-  assert.deepEqual(advanceScroll(0, 60, 1), { cameraY: 69.2, speed: 69.2 });
-  assert.deepEqual(advanceScroll(0, 90, 1), { cameraY: 90.8, speed: 90.8 });
-  assert.deepEqual(advanceScroll(0, 120, 1), { cameraY: 112.4, speed: 112.4 });
-  assert.deepEqual(advanceScroll(0, 10000, 1), { cameraY: 120, speed: 120 });
+  assert.deepEqual(advanceScroll(0, 20, 1), { cameraY: 42.6, speed: 42.6 });
+  assert.deepEqual(advanceScroll(0, 60, 1), { cameraY: 81.8, speed: 81.8 });
+  assert.deepEqual(advanceScroll(0, 90, 1), { cameraY: 116.45, speed: 116.45 });
+  assert.deepEqual(advanceScroll(0, 120, 1), { cameraY: 155.6, speed: 155.6 });
+  const openingGain = speeds[20] - speeds[19];
+  const lateGain = speeds[120] - speeds[119];
+  assert.ok(lateGain > openingGain, 'later floors must add more pressure than early floors');
+  assert.deepEqual(advanceScroll(0, 10000, 1), { cameraY: 180, speed: 180 });
 });
 
 test('office theme changes at floors thirty-one and sixty-one', () => {
