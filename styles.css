@@ -112,7 +112,7 @@ h2 { font-size: 42px; }
 .mini-ranking div:last-child { border: 0; }
 .mini-ranking .you { color: var(--orange-dark); }
 
-.primary-button, .secondary-button {
+.primary-button {
   min-height: 52px;
   border: 2px solid var(--ink);
   font-weight: 900;
@@ -120,7 +120,7 @@ h2 { font-size: 42px; }
 }
 .primary-button { background: var(--orange); color: #fffaf0; box-shadow: 4px 4px 0 var(--ink); font-size: 18px; }
 .primary-button:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
-.secondary-button { margin-top: 12px; background: transparent; color: var(--ink); }
+
 .instruction { margin: 17px 0 0; color: var(--muted); text-align: center; font-size: 11px; line-height: 1.5; }
 
 .event-toast, .rival-toast {

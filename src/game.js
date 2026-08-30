@@ -48,7 +48,6 @@ const eventImpact = document.querySelector('#event-impact');
 const rivalToast = document.querySelector('#rival-toast');
 const startButton = document.querySelector('#start-button');
 const retryButton = document.querySelector('#retry-button');
-const shareButton = document.querySelector('#share-button');
 const soundButton = document.querySelector('#sound-button');
 const leftButton = document.querySelector('#left-button');
 const rightButton = document.querySelector('#right-button');
@@ -972,15 +971,6 @@ soundButton.addEventListener('click', () => {
   soundButton.classList.toggle('off', !soundOn);
   soundButton.setAttribute('aria-label', soundOn ? '關閉音效' : '開啟音效');
 });
-shareButton.addEventListener('click', async () => {
-  const text = `《誰先下班？》今天逃了 ${state.score} 層。${nextRival(state.score, rivals) ? `再幾層就能超過同事。` : '今天不是我加班。'}`;
-  try {
-    await navigator.clipboard.writeText(text);
-    shareButton.textContent = '已複製';
-    window.setTimeout(() => { shareButton.textContent = '複製挑戰文案'; }, 1200);
-  } catch { shareButton.textContent = text; }
-});
-
 window.addEventListener('resize', () => { resizeCanvas(); draw(); });
 resizeCanvas();
 draw();

@@ -425,3 +425,10 @@ test('daily rivals use the approved fifty and eighty floor targets', () => {
     { name: 'Kevin', score: 80, reason: '客戶改方向' },
   ]);
 });
+
+test('result panel omits the low-value clipboard challenge action', () => {
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const game = readFileSync(new URL('../src/game.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(html, /share-button|複製挑戰文案/);
+  assert.doesNotMatch(game, /shareButton|navigator\.clipboard/);
+});
