@@ -167,17 +167,14 @@ test('each run plan binds every revealed line to its matching actor', () => {
   }
 });
 
-test('daily plan changes landing lanes in predictable five-floor sections', () => {
-  const plan = createPlatformPlan(createSeededRandom(7), 20);
-  const laneCenters = [];
-  for (let start = 0; start < plan.length; start += 5) {
-    const section = plan.slice(start, start + 5).map((platform) => platform.x);
-    assert.ok(Math.max(...section) - Math.min(...section) <= 4);
-    laneCenters.push(section.reduce((sum, x) => sum + x, 0) / section.length);
-  }
-  for (let index = 1; index < laneCenters.length; index += 1) {
-    assert.ok(Math.abs(laneCenters[index] - laneCenters[index - 1]) >= 20);
-  }
+test('platforms vary on every floor while keeping each move reachable', () => {
+  const plan = createPlatformPlan(createSeededRandom(7), 30);
+  const shifts = plan.slice(1).map((platform, index) => (
+    Math.abs(platform.x - plan[index].x)
+  ));
+  assert.equal(shifts.every((shift) => shift >= 10 && shift <= 28), true);
+  assert.equal(new Set(plan.map((platform) => platform.x)).size >= 12, true);
+  assert.equal(plan.every((platform) => platform.x >= 8 && platform.x <= 72), true);
 });
 
 test('horizontal motion accelerates, slows down, and stays inside the playfield', () => {
@@ -224,19 +221,17 @@ test('hud values reset the visible score and sanity for a new game', () => {
   });
 });
 
-test('screen pressure accelerates more noticeably as floors get deeper', () => {
-  const start = advanceScroll(0, 0, 1);
-  const floorTwenty = advanceScroll(0, 20, 1);
-  const floorSixty = advanceScroll(0, 60, 1);
-  const floorNinety = advanceScroll(0, 90, 1);
-  const floorOneTwenty = advanceScroll(0, 120, 1);
-  const capped = advanceScroll(0, 10000, 1);
-  assert.deepEqual(start, { cameraY: 26, speed: 26 });
-  assert.deepEqual(floorTwenty, { cameraY: 36.4, speed: 36.4 });
-  assert.deepEqual(floorSixty, { cameraY: 62, speed: 62 });
-  assert.deepEqual(floorNinety, { cameraY: 87.8, speed: 87.8 });
-  assert.deepEqual(floorOneTwenty, { cameraY: 100.4, speed: 100.4 });
-  assert.deepEqual(capped, { cameraY: 110, speed: 110 });
+test('screen pressure gets faster on every floor without segmented jumps', () => {
+  const speeds = Array.from({ length: 121 }, (_, floor) => (
+    advanceScroll(0, floor, 1).speed
+  ));
+  assert.equal(speeds.slice(1).every((speed, index) => speed > speeds[index]), true);
+  assert.deepEqual(advanceScroll(0, 0, 1), { cameraY: 26, speed: 26 });
+  assert.deepEqual(advanceScroll(0, 20, 1), { cameraY: 40.4, speed: 40.4 });
+  assert.deepEqual(advanceScroll(0, 60, 1), { cameraY: 69.2, speed: 69.2 });
+  assert.deepEqual(advanceScroll(0, 90, 1), { cameraY: 90.8, speed: 90.8 });
+  assert.deepEqual(advanceScroll(0, 120, 1), { cameraY: 112.4, speed: 112.4 });
+  assert.deepEqual(advanceScroll(0, 10000, 1), { cameraY: 120, speed: 120 });
 });
 
 test('office theme changes at floors thirty-one and sixty-one', () => {

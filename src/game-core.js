@@ -140,17 +140,20 @@ export function weightedEventIndex(pool, roll) {
 
 export function createPlatformSequence(random) {
   const damageEffects = ['documents', 'chair', 'box'];
-  const lanes = [8, 35, 64];
-  let lane = 1;
+  let platformX = 35;
   let index = 0;
   return () => {
-    if (index > 0 && index % 5 === 0) {
-      lane = (lane + (random() < 0.5 ? 1 : 2)) % lanes.length;
+    if (index > 0) {
+      const shift = 10 + Math.floor(random() * 19);
+      const direction = random() < 0.5 ? -1 : 1;
+      const proposedX = platformX + direction * shift;
+      platformX = proposedX < 8 || proposedX > 72
+        ? platformX - direction * shift
+        : proposedX;
     }
     const floor = index + 1;
     const appearances = platformAppearancesForFloor(floor);
     const appearance = appearances[Math.floor(random() * appearances.length)];
-    const jitter = Math.round((random() - 0.5) * 4);
     const eventRoll = index === 0 ? 1 : random();
     const eventKind = index === 0 ? 'none' : eventKindForRoll(eventRoll);
     const eventPool = eventKind === 'damage' ? DAMAGE_EVENTS : RECOVERY_EVENTS;
@@ -167,7 +170,7 @@ export function createPlatformSequence(random) {
       eventIndex,
       effectKind,
       actor: event?.actor ?? null,
-      x: Math.max(8, Math.min(72, lanes[lane] + jitter)),
+      x: platformX,
       y: 18 + index * 92,
     };
     index += 1;
@@ -204,18 +207,7 @@ export function landsOnPlatform(player, platform) {
 }
 
 export function advanceScroll(cameraY, deepestFloor, dt) {
-  const openingFloors = Math.min(deepestFloor, 30);
-  const buildingFloors = Math.min(Math.max(0, deepestFloor - 30), 30);
-  const pressureFloors = Math.min(Math.max(0, deepestFloor - 60), 30);
-  const overtimeFloors = Math.max(0, deepestFloor - 90);
-  const speed = Number(Math.min(
-    110,
-    26
-      + openingFloors * 0.52
-      + buildingFloors * 0.68
-      + pressureFloors * 0.86
-      + overtimeFloors * 0.42,
-  ).toFixed(4));
+  const speed = Number(Math.min(120, 26 + deepestFloor * 0.72).toFixed(4));
   return { cameraY: cameraY + speed * dt, speed };
 }
 
