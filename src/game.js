@@ -38,6 +38,7 @@ const ctx = canvas.getContext('2d');
 const playfield = document.querySelector('#playfield');
 const introPanel = document.querySelector('#intro-panel');
 const resultPanel = document.querySelector('#result-panel');
+const swipeHint = document.querySelector('#swipe-hint');
 const scoreNode = document.querySelector('#score');
 const sanityNumber = document.querySelector('#sanity-number');
 const sanityFill = document.querySelector('#sanity-fill');
@@ -49,8 +50,6 @@ const rivalToast = document.querySelector('#rival-toast');
 const startButton = document.querySelector('#start-button');
 const retryButton = document.querySelector('#retry-button');
 const soundButton = document.querySelector('#sound-button');
-const leftButton = document.querySelector('#left-button');
-const rightButton = document.querySelector('#right-button');
 
 const rivals = RIVALS;
 
@@ -69,6 +68,7 @@ let audioContext;
 let runNumber = 0;
 const input = { left: false, right: false };
 const swipe = { pointerId: null, lastX: 0 };
+let swipeHintDismissed = false;
 
 function dailySeed() {
   const date = new Date();
@@ -146,6 +146,7 @@ function resetGame() {
 function startGame() {
   introPanel.hidden = true;
   resultPanel.hidden = true;
+  swipeHint.hidden = swipeHintDismissed;
   resetGame();
   previousTime = performance.now();
   cancelAnimationFrame(animationId);
@@ -916,14 +917,6 @@ function beep(frequency, duration, type) {
 
 function setInput(side, active) {
   input[side] = active;
-  (side === 'left' ? leftButton : rightButton).classList.toggle('active', active);
-}
-
-function bindHold(button, side) {
-  button.addEventListener('pointerdown', (event) => { event.preventDefault(); button.setPointerCapture(event.pointerId); setInput(side, true); });
-  button.addEventListener('pointerup', () => setInput(side, false));
-  button.addEventListener('pointercancel', () => setInput(side, false));
-  button.addEventListener('lostpointercapture', () => setInput(side, false));
 }
 
 function stopSwipe(pointerId) {
@@ -944,6 +937,8 @@ canvas.addEventListener('pointermove', (event) => {
   if (swipe.pointerId !== event.pointerId) return;
   const direction = swipeDirection(event.clientX - swipe.lastX);
   if (direction === 0) return;
+  swipeHintDismissed = true;
+  swipeHint.hidden = true;
   setInput('left', direction < 0);
   setInput('right', direction > 0);
   swipe.lastX = event.clientX;
@@ -952,8 +947,6 @@ canvas.addEventListener('pointerup', (event) => stopSwipe(event.pointerId));
 canvas.addEventListener('pointercancel', (event) => stopSwipe(event.pointerId));
 canvas.addEventListener('lostpointercapture', (event) => stopSwipe(event.pointerId));
 
-bindHold(leftButton, 'left');
-bindHold(rightButton, 'right');
 window.addEventListener('keydown', (event) => {
   if (['ArrowLeft', 'a', 'A'].includes(event.key)) setInput('left', true);
   if (['ArrowRight', 'd', 'D'].includes(event.key)) setInput('right', true);

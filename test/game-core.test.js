@@ -432,3 +432,12 @@ test('result panel omits the low-value clipboard challenge action', () => {
   assert.doesNotMatch(html, /share-button|複製挑戰文案/);
   assert.doesNotMatch(game, /shareButton|navigator\.clipboard/);
 });
+
+test('mobile play teaches swiping without permanent direction buttons', () => {
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const game = readFileSync(new URL('../src/game.js', import.meta.url), 'utf8');
+  assert.match(html, /id="swipe-hint"[^>]*>左右滑動逃跑</);
+  assert.doesNotMatch(html, /touch-controls|left-button|right-button/);
+  assert.doesNotMatch(game, /leftButton|rightButton|bindHold/);
+  assert.match(game, /swipeHint\.hidden = true/);
+});

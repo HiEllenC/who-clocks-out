@@ -82,7 +82,7 @@ canvas { width: 100%; height: 100%; display: block; background: var(--panel); }
 
 .panel {
   position: absolute;
-  inset: 22px 20px 104px;
+  inset: 22px 20px;
   z-index: 8;
   display: flex;
   flex-direction: column;
@@ -184,28 +184,22 @@ h2 { font-size: 42px; }
 .event-toast.show ~ .rival-toast.show { top: 8px; }
 .event-toast.show, .rival-toast.show { opacity: 1; transform: translate(-50%, 0) scale(1); }
 
-.touch-controls {
+.swipe-hint {
   position: absolute;
   z-index: 7;
-  inset: auto 14px max(12px, env(safe-area-inset-bottom));
-  display: grid;
-  grid-template-columns: 96px 96px;
-  justify-content: space-between;
-  gap: 14px;
+  left: 50%;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  padding: 9px 14px;
+  border: 1px solid var(--paper);
+  background: rgba(32, 35, 31, .9);
+  color: var(--paper);
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
   pointer-events: none;
 }
-.touch-controls button {
-  min-height: 52px;
-  border: 2px solid rgba(32, 35, 31, .55);
-  background: rgba(255, 250, 240, .72);
-  color: var(--ink);
-  backdrop-filter: blur(3px);
-  pointer-events: auto;
-  cursor: pointer;
-  touch-action: none;
-}
-.touch-controls button.active { background: var(--yellow); transform: translateY(2px); }
-.touch-controls span { font-size: 24px; font-weight: 900; }
+.swipe-hint[hidden] { display: none; }
 
 .result-score { margin: 12px 0 3px; display: flex; align-items: baseline; gap: 8px; }
 .result-score strong { font-size: 68px; line-height: 1; }
@@ -217,11 +211,14 @@ h2 { font-size: 42px; }
   .game-shell { min-height: 100dvh; }
   .hud { height: 80px; }
   .playfield { height: calc(100% - 80px); }
-  .panel { inset: 14px 18px 88px; padding: 21px; }
+  .panel { inset: 14px 18px; padding: 21px; }
   h1 { font-size: 42px; }
   .tagline { margin-bottom: 13px; }
   .mini-ranking div { padding: 7px 4px; }
-  .touch-controls button { min-height: 48px; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .swipe-hint { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

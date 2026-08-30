@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#f2eadc">
   <title>誰先下班？</title>
-  <link rel="stylesheet" href="./styles.css?v=26">
+  <link rel="stylesheet" href="./styles.css?v=27">
 </head>
 <body>
   <main class="game-shell" aria-label="誰先下班遊戲">
@@ -51,13 +51,9 @@
         <div class="next-target" id="next-target"></div>
         <button class="primary-button" id="retry-button" type="button">我還是想回家</button>
       </section>
-
-      <div class="touch-controls" aria-label="移動控制">
-        <button id="left-button" type="button" aria-label="向左移動"><span>←</span></button>
-        <button id="right-button" type="button" aria-label="向右移動"><span>→</span></button>
-      </div>
+      <div class="swipe-hint" id="swipe-hint" hidden>左右滑動逃跑</div>
     </section>
   </main>
-  <script type="module" src="./src/game.js?v=26"></script>
+  <script type="module" src="./src/game.js?v=27"></script>
 </body>
 </html>
