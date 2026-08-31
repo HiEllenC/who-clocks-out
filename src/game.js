@@ -6,6 +6,7 @@ import {
   landsOnPlatform,
   nextRival,
   updateHorizontalMotion,
+  fixedTimeSteps,
   swipeDirection,
   hudValues,
   advanceScroll,
@@ -61,6 +62,7 @@ const colors = {
 let state;
 let animationId;
 let previousTime = 0;
+let fixedTimeAccumulator = 0;
 let toastTimer;
 let rivalTimer;
 let soundOn = true;
@@ -149,6 +151,7 @@ function startGame() {
   swipeHint.hidden = swipeHintDismissed;
   resetGame();
   previousTime = performance.now();
+  fixedTimeAccumulator = 0;
   cancelAnimationFrame(animationId);
   animationId = requestAnimationFrame(loop);
   beep(420, .05, 'square');
@@ -432,9 +435,10 @@ function finalizeEndGame() {
 }
 
 function loop(time) {
-  const dt = Math.min(.033, (time - previousTime) / 1000);
+  const clock = fixedTimeSteps(fixedTimeAccumulator, (time - previousTime) / 1000);
   previousTime = time;
-  update(dt, time);
+  fixedTimeAccumulator = clock.remainder;
+  for (let step = 0; step < clock.steps; step += 1) update(clock.step, time);
   draw(time);
   if (state.running || state.lossAnimation) animationId = requestAnimationFrame(loop);
 }

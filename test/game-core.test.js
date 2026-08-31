@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import * as gameCore from '../src/game-core.js';
 import {
   clampSanity,
   applyEvent,
@@ -41,6 +42,28 @@ import {
   platformAppearancesForFloor,
   createPlatformSequence,
 } from '../src/game-core.js';
+
+function horizontalPositionAfterHalfSecond(fps) {
+  let accumulator = 0;
+  let player = { x: 50, vx: 0 };
+  for (let frame = 0; frame < fps / 2; frame += 1) {
+    const clock = gameCore.fixedTimeSteps(accumulator, 1 / fps);
+    accumulator = clock.remainder;
+    for (let step = 0; step < clock.steps; step += 1) {
+      player = { ...player, ...updateHorizontalMotion(player, 1, clock.step) };
+    }
+  }
+  return player;
+}
+
+test('horizontal movement covers the same distance at 30, 60, and 120 FPS', () => {
+  const at30 = horizontalPositionAfterHalfSecond(30);
+  const at60 = horizontalPositionAfterHalfSecond(60);
+  const at120 = horizontalPositionAfterHalfSecond(120);
+  assert.deepEqual(at30, at60);
+  assert.deepEqual(at60, at120);
+  assert.ok(at120.x > 50);
+});
 
 test('instruction tells players to escape before work crushes them', () => {
   const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');

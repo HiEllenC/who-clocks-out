@@ -191,6 +191,13 @@ export function updateHorizontalMotion(player, input, dt) {
   return { x: Number(x.toFixed(4)), vx: Number(vx.toFixed(4)) };
 }
 
+export function fixedTimeSteps(accumulator, elapsed, step = 1 / 120, maxElapsed = 0.1) {
+  const total = Math.max(0, accumulator) + Math.min(maxElapsed, Math.max(0, elapsed));
+  const steps = Math.floor((total + step * 1e-9) / step);
+  const remainder = Math.max(0, total - steps * step);
+  return { steps, step, remainder: Number(remainder.toFixed(10)) };
+}
+
 export function swipeDirection(deltaX, threshold = 10) {
   if (Math.abs(deltaX) < threshold) return 0;
   return deltaX > 0 ? 1 : -1;
