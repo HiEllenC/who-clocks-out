@@ -214,8 +214,9 @@ export function landsOnPlatform(player, platform) {
 }
 
 export function advanceScroll(cameraY, deepestFloor, dt) {
-  const progressivePressure = deepestFloor * 0.78 + deepestFloor ** 2 * 0.0025;
-  const speed = Number(Math.min(180, 26 + progressivePressure).toFixed(4));
+  const speedBeforeSoftCeiling = 26 + deepestFloor * 0.84 + deepestFloor ** 2 * 0.003;
+  const softCeilingSpeed = 300 - 130 * Math.exp(-(deepestFloor - 120) * 1.56 / 130);
+  const speed = Number((deepestFloor <= 120 ? speedBeforeSoftCeiling : softCeilingSpeed).toFixed(4));
   return { cameraY: cameraY + speed * dt, speed };
 }
 
