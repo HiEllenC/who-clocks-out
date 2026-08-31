@@ -40,7 +40,6 @@ const RECOVERY_EVENTS = [
 ];
 
 export const RIVALS = Object.freeze([
-  { name: 'Jason', score: 8, reason: '五分鐘就好' },
   { name: 'Amy', score: 50, reason: '快速對一下' },
   { name: 'Kevin', score: 80, reason: '客戶改方向' },
 ]);

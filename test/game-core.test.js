@@ -95,7 +95,7 @@ test('eventForPlatform reads the outcome preassigned by the daily seed', () => {
 
 test('nextRival finds the nearest friend above the player score', () => {
   const rivals = [
-    { name: 'Jason', score: 64 },
+    { name: 'Mia', score: 64 },
     { name: 'Kevin', score: 91 },
     { name: 'Amy', score: 102 },
   ];
@@ -443,9 +443,8 @@ test('earned landing combo keeps its celebration visible long enough to read', (
   });
 });
 
-test('daily rivals use the approved fifty and eighty floor targets', () => {
+test('daily rivals contain only the approved current records', () => {
   assert.deepEqual(RIVALS, [
-    { name: 'Jason', score: 8, reason: '五分鐘就好' },
     { name: 'Amy', score: 50, reason: '快速對一下' },
     { name: 'Kevin', score: 80, reason: '客戶改方向' },
   ]);
